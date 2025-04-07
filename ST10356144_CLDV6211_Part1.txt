@@ -1,0 +1,122 @@
+Table of Contents
+Part 1	2
+ERD	2
+Database Script	3
+Theoretical Question 1	5
+Security:	5
+Deployment Speed:	5
+Resource Management	5
+Theoretical Question 2	6
+Links	7
+Screenshots	8
+References	10
+Credits	10
+
+
+ 
+Part 1
+ERD
+ 
+ 
+Database Script
+
+--DATABASE CREATION
+USE master
+IF EXISTS (SELECT * FROM sys.databases WHERE name = 'EventEaseDB')
+DROP DATABASE EventEaseDB
+CREATE DATABASE EventEaseDB
+
+USE EventEaseDB
+
+--TABLE CREATION
+CREATE TABLE Venue(
+	Id INT IDENTITY(1,1) PRIMARY KEY, 
+	VenueName VARCHAR (250) NOT NULL,
+	Location VARCHAR (250) NOT NULL,
+	Capacity INT,
+	ImageURL VARCHAR (250) NOT NULL
+);
+
+CREATE TABLE Event(
+	Id INT IDENTITY(1,1) PRIMARY KEY, 
+	VenueId INT NOT NULL,
+	EventName VARCHAR (250) NOT NULL,
+	EventDate DATE NOT NULL,
+	Description VARCHAR (250) NOT NULL,
+	CONSTRAINT FK_Event_Venue FOREIGN KEY (VenueId) REFERENCES Venue(Id), 
+);
+
+CREATE TABLE Booking(
+	Id INT IDENTITY(1,1) PRIMARY KEY, 
+	VenueId INT NOT NULL, 
+	EventId INT NOT NULL, 
+	BookingDate DATE NOT NULL,
+	CONSTRAINT FK_Booking_Venue FOREIGN KEY (VenueId) REFERENCES Venue(Id), 
+	CONSTRAINT FK_Booking_Event FOREIGN KEY (EventId) REFERENCES Event(Id) 
+);
+
+--Insert sample data 
+INSERT INTO Venue (VenueName,Location, Capacity, ImageURL) 
+VALUES ('Billiards', '27 Clifton Street', 70, 'htps://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.facebook.com%2Fbilliardcafesa%2F&psig=AOvVaw0AImhiBzrTa5XMFFvpudRW&ust=1744116194122000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCNDhlaz5xYwDFQAAAAAdAAAAABAE')
+
+INSERT INTO Event (VenueId, EventName,EventDate, Description)
+VALUES (1, 'Jeremys Pool Tournament', '2025-04-09', 'Jeremy wants to have a pool tournament at Billiards')
+
+INSERT INTO Booking (VenueId, EventId,BookingDate)
+VALUES (1, 1, '2025-04-09')
+
+ 
+Theoretical Question 1
+
+Security: 
+Cloud-Based: The security is handled by the cloud provider, due to that, users only have the option of trusting the cloud provider as they have limited control over the security protocols. Cloud providers offer security features and packages which are preprogrammed with limited customization features. Security protocols are handled by third party providers. Such as EventEase having a database on azure, data is encrypted by azure and cloud firewalls provided by azure.
+On-Premises: Some companies require very strong security defenses, on-premises offers better security for these companies as the security protocols are set by the business itself. Security protocols are handled within the company’s premises. Such as EventEase storing data on servers within the physical premises where azure resides, the security protocols would include physical security such as surveillance cameras as well as intrusion detection/prevention systems which monitors network traffic.
+
+Deployment Speed:
+Cloud-Based: Cloud deployment is very fast as the deployment does not require any physical infrastructure setup. Deploying EventEase on azure is a simple and quick process and can be done at any location assuming users have changed IP address settings to allow for such
+On-Premises: Deployment is slower than cloud deployment due to the company needing to buy and setup physical infrastructure as well as install software, configure servers and setup security protocols. Deploying EventEase on the premises will take a long time as the business will have to purchase the hardware as well as arrange for the setup of the physical infrastructure, take time to install all required software and have employees spend their time developing security protocols.
+
+Resource Management
+Cloud-Based: Data storage and computing use third party servers which means that the hosting and management of all the computing infrastructure and data is done by a third party provider. Deploying EventEase on azure will mean that all data and most computing protocols will be stored on azure, this being an example of PaaS (Platform as a Service)
+On-Premises: The hosting and management of all the computing infrastructure and data is done within the company’s physical premises using the company’s own facilities. Deploying EventEase on-premise will involve the use of local file severs to allow for sharing of data within the company, email servers to allow for communication and on-premise database.
+ 
+Theoretical Question 2
+
+IaaS: Infrastructure as a Service is a cloud computing model that allows access to computing resources such as storage and servers. An example of this is Compute Engine, users can “rent” and use the hardware to run their application as well as manage the operating system, data and runtime, this is one of the main differences between IaaS and the other services.
+
+PaaS: Platform as a Service is a computing model that allows users to focus on just coding whilst a third party provider provides and manages all the hardware and software of the infrastructure. An example of this is Microsoft Azure App Services, PaaS allows users to create and deploy their own code whilst the provider manages the server and other computing infrastructure.
+
+SaaS: Software as a Service is a cloud-based computing model that allows access to applications over the internet where a provider host and manages the infrastructure and updates. An example of this is Google Workspace, users pay to use an application that a cloud provider manages, maintains and secures but users are responsible for their own data.
+
+PaaS is ideal for EventEase as this allows the business to focus on building the systems logic without having to configure severs, updates and the maintenance of the infrastructure is managed by the cloud provider. EventEase can build and deploy their web app without having to worry about the computing infrastructure which is very useful to business starting up and during the rapid growth stages.
+ 
+Links
+EventEase Web App Link
+https://eventeaseappmjd-brbndhhafvdjfsf2.southafricanorth-01.azurewebsites.net/
+EventEase Azure Web App Link
+https://portal.azure.com/#@advtechonline.onmicrosoft.com/resource/subscriptions/d1788afb-2254-4f5f-8826-94750f6da544/resourceGroups/AZ-JHB-RSG-IIEMSA-ST10356144-TER/providers/Microsoft.Web/sites/EventEaseAppMJD/appServices
+EventEase Azure Database Link
+https://portal.azure.com/#@advtechonline.onmicrosoft.com/resource/subscriptions/d1788afb-2254-4f5f-8826-94750f6da544/resourceGroups/AZ-JHB-RSG-IIEMSA-ST10356144-TER/providers/Microsoft.Sql/servers/eventease-st10356144/databases/EventEase/queryEditor
+ 
+Screenshots 
+ 
+References
+Google, n.d. PaaS vs. IaaS vs. SaaS vs. CaaS: What's difference?. [Online] 
+Available at: https://cloud.google.com/learn/paas-vs-iaas-vs-saas
+[Accessed 07 April 2025].
+Keeports, A., n.d. On Premise vs. Cloud: Key Differences, Benefits and Risks. [Online] 
+Available at: https://www.cleo.com/blog/knowledge-base-on-premise-vs-cloud#:~:text=On%2Dpremise%20software%20is%20installed,web%20browser%20or%20other%20interface.
+[Accessed 07 April 2025].
+Krysińska, J., 2024. On-premise vs. cloud computing: definition and differences. [Online] 
+Available at: https://nordlayer.com/blog/on-premise-vs-cloud-differences/
+[Accessed 07 April 2025].
+Toan, D., 2024. On-Premise vs Cloud: What is the difference?. [Online] 
+Available at: https://reliasoftware.com/blog/cloud-vs-on-premise-deployment
+[Accessed 07 April 2025].
+
+Credits
+This project is based on Student Internship: https://drive.google.com/drive/folders/1ewgeCIH-Zx8MFqBUDnKZKJPxYLlHNgiH?usp=sharing
+&
+https://drive.google.com/file/d/1XM_gLWRX3ba2IPSSBZAK4i1j5BZ5s8YU/view?usp=sharing
+
+

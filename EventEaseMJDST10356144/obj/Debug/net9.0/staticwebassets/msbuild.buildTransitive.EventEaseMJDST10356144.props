@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\EventEaseMJDST10356144.props" />
+</Project>
