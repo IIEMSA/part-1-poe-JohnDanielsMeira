@@ -51,21 +51,31 @@ namespace EventEaseMJDST10356144.Controllers
 
         public async Task<IActionResult> Delete(int? id)//Allow user to delete a row of data 
         {
-            var events = await _context.Event.FirstOrDefaultAsync(m => m.Id == id);
+            if (id == null) return NotFound();
 
+            var @event = await _context.Event.Include(e => e.Venue).FirstOrDefaultAsync(e => e.Id == id);
+            //.Include(v => v.Events)
+            if (@event == null) return NotFound();
 
-            if (events == null)
-            {
-                return NotFound();
-            }
-            return View(events);
+            return View(@event);
         }
-        [HttpPost]
-        public async Task<IActionResult> Delete(int id)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var events = await _context.Event.FindAsync(id);
-            _context.Event.Remove(events);
+            var @event = await _context.Event.Include(e => e.Venue).FirstOrDefaultAsync(e => e.Id == id); //FindAsync(id);
+            if (@event == null) return NotFound();
+
+            var isBooked = await _context.Booking.AnyAsync(b => b.EventId == id);
+            if (isBooked)
+            {
+                TempData["ErrorMessage"] = "Cannot delete event as it has existing bookings.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            _context.Event.Remove(@event);
             await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Event deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
 

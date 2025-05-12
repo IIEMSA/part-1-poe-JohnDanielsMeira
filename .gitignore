@@ -1,0 +1,19 @@
+# Ignore build results
+bin/
+obj/
+*.user
+*.suo
+
+# Ignore VS temporary files, build results, and
+.vs/
+.vscode/
+
+# Ignore publish folder
+*/Release/
+*/Debug/
+**/PubTmp/
+
+# Ignore logs and others
+*.log
+*.vsidx
+*.db
