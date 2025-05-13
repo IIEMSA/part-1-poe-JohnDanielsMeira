@@ -19,7 +19,7 @@ namespace EventEaseMJDST10356144.Models
         public int Capacity { get; set; }
 
         //This stays - to store the URL of the image uploaded
-        public string ImageURL { get; set; }
+        public string? ImageURL { get; set; }
 
         public List<Booking> Booking { get; set; } = new();
         public List<Event> Events { get; set; } = new();

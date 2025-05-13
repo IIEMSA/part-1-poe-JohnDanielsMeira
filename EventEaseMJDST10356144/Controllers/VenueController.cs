@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using System.Configuration;
 
 
 namespace EventEaseMJDST10356144.Controllers
@@ -13,9 +14,11 @@ namespace EventEaseMJDST10356144.Controllers
     public class VenueController : Controller
     {
         private readonly EventEaseDBContext _context;
-        public VenueController(EventEaseDBContext context)
+        private readonly IConfiguration _configuration;
+        public VenueController(EventEaseDBContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
         public async Task<IActionResult> Index()//Displays the data stored as a table
 
@@ -159,7 +162,7 @@ namespace EventEaseMJDST10356144.Controllers
 
         private async Task<string> UploadImageToBlobAsync(IFormFile imageFile)
         {
-            var connectionString = "DefaultEndpointsProtocol=https;AccountName=eventeasemjd;AccountKey=6r+AR5XEyH5uwBZ173+8GZstE7BVGDz0CPIuNYC/hAbdTKIytB1/uszPo4K/nWUW4/PdemFJMsmI+AStwSHLtw==;EndpointSuffix=core.windows.net";
+            var connectionString = _configuration.GetConnectionString("AzureBlobStorage");
             var containerName = "cldv6211poe";
 
             var blobServiceClient = new BlobServiceClient(connectionString);
